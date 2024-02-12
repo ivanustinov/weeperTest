@@ -1,10 +1,11 @@
 package ru.ustinov.sapertest.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ustinov.sapertest.model.Field;
-
-import java.util.UUID;
+import ru.ustinov.sapertest.validation.TurnValidator;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -13,7 +14,11 @@ import java.util.UUID;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class FieldService {
+
+    @Autowired
+    private final TurnValidator turnValidator;
 
     private final ThreadLocal<int[][]> directionsThreadLocal = ThreadLocal.withInitial(() ->
             new int[][]{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}});
@@ -22,29 +27,24 @@ public class FieldService {
         return directionsThreadLocal.get();
     }
 
-    public Field startGame(byte height, byte width, short mines) {
-        final Field field = new Field(height, width, mines);
-        field.setGameId(UUID.randomUUID().toString());
-        return field;
-    }
-
     public Field turn(Field field, int row, int col) {
+        turnValidator.turnCheck(field.getForPlayer(), row, col);
         final char[][] marked = field.getMarked();
         char[][] forPlayer = field.getForPlayer();
         // Проверка на подрыв
         if (marked[row][col] == 'X') {
-            log.info("Произошел подрыв на клетке с координатами x:{}, y:{} на поле с uuid = {}", row, col,
-                    field.getGameId());
+            log.info("Окончание игры с uuid = {}, подрыв на клетке с координатами строка:{}, столбец:{}"
+                    ,field.getGameId(), row, col);
             field.setForPlayer(marked);
             field.setCompleted(true);
         } else {
             final int leftCells = openCell(marked, forPlayer, row, col, field.getCountOfLeftCells());
             if (leftCells == 0) {
                 log.info("Окончание игры с победой!");
-                field.setCompleted(true);
                 // Открываем мины игроку после победы
                 mapMineFieldForWinner(forPlayer, field.getCoordinatesOfMines());
             }
+            field.setCompleted(leftCells == 0);
             field.setCountOfLeftCells(leftCells);
         }
         return field;

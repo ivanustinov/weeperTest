@@ -1,10 +1,10 @@
 package ru.ustinov.sapertest.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import ru.ustinov.sapertest.validation.ValidMinesCount;
+import org.hibernate.validator.constraints.Range;
+import ru.ustinov.sapertest.validation.MinesCountCheck;
 
 /***
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -12,18 +12,19 @@ import ru.ustinov.sapertest.validation.ValidMinesCount;
  * @since 09.02.2024
  */
 @Data
-@ValidMinesCount
+@MinesCountCheck(messageCode = "valid.mine_count.message")
 public class NewFieldTo {
 
-    @Min(value = 2)
-    @Max(value = 30)
-    private byte width;
+    @NotNull
+    @Range(min = 2, max = 30, message = "ширина поля должна быть не менее {min} и не более {max}")
+    private Integer width;
 
-    @Min(value = 2)
-    @Max(value = 30)
-    private byte height;
+    @NotNull
+    @Range(min = 2, max = 30, message = "высота поля должна быть не менее {min} и не более {max}")
+    private Integer height;
 
+    @NotNull
     @JsonProperty("mines_count")
-    private short minesCount;
+    private Integer minesCount;
 
 }

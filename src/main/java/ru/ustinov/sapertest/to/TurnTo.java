@@ -1,6 +1,8 @@
 package ru.ustinov.sapertest.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -8,14 +10,16 @@ import lombok.Data;
  * @version 1.0
  * @since 09.02.2024
  */
-
 @Data
 public class TurnTo {
 
-    private byte col;
+    @NotNull
+    private Integer col;
 
-    private byte row;
+    @NotNull
+    private Integer row;
 
+    @NotBlank
     @JsonProperty("game_id")
     private String gameId;
 }
