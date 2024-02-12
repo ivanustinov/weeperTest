@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Minesweeper</title>
     <style>
         body {
             font-family: sans-serif;
         }
+
         fieldset {
             border: lightgray 1px solid;
         }
+
         legend {
             color: gray;
         }
+
         label {
             display: block;
             float: left;
@@ -21,19 +24,24 @@
             padding-right: 10pt;
             width: 45%;
         }
+
         .field-size input, .mines-count input {
             width: 40pt;
         }
+
         small, small a {
             color: gray;
         }
+
         table {
             border-collapse: collapse;
             margin: 20px auto;
         }
+
         caption {
             margin-bottom: 5pt;
         }
+
         td {
             border: 1px solid #ccc;
             text-align: center;
@@ -41,44 +49,57 @@
             height: 25px;
             cursor: not-allowed;
         }
+
         td.cell-unknown {
             cursor: pointer;
             background-color: #f6f6f6;
         }
+
         td.cell-unknown:hover {
             background-color: #eee;
         }
+
         td.cell-0 {
             color: #eeeeee;
         }
+
         td.cell-1 {
             color: blue;
         }
+
         td.cell-2 {
             color: gray;
         }
+
         td.cell-3 {
             color: orange;
         }
+
         td.cell-4 {
             color: orangered;
         }
+
         td.cell-5 {
             color: red;
         }
+
         td.cell-6 {
             color: darkred;
         }
+
         td.cell-7 {
             color: firebrick;
         }
+
         td.cell-7 {
             color: brown;
         }
+
         td.cell-X {
             color: white;
             background-color: red;
         }
+
         td.cell-M {
             color: white;
             background-color: green;
@@ -96,25 +117,25 @@
 
         <p>
             <label for="url">URL API (можно относительный путь):</label>
-            <input id="url" value="/saper" />
+            <input id="url" value="/saper"/>
             <small>(<a href="/swagger/">спецификация</a>)</small>
         </p>
 
         <p class="field-size">
             <label>Размер игрового поля (ширина x высота):</label>
-            <input name="width" type="number" min="2" step="1" value="10" required />
+            <input name="width" type="number" min="2" step="1" value="10" required/>
             x
-            <input name="height" type="number" min="2" step="1" value="10" required />
+            <input name="height" type="number" min="2" step="1" value="10" required/>
         </p>
 
         <p class="mines-count">
             <label>Количество мин:</label>
-            <input name="mines_count" type="number" min="1" step="1" value="10" required />
+            <input name="mines_count" type="number" min="1" step="1" value="10" required/>
         </p>
 
         <p>
             <label>&nbsp;</label>
-            <input type="submit" value="Новая игра" name="button" />
+            <input type="submit" value="Новая игра" name="button"/>
         </p>
     </form>
 
@@ -129,7 +150,7 @@
         game_id: "",
     };
 
-    function startGame({ game_id, field }) {
+    function startGame({game_id, field}) {
         removeTable();
         stateGame.game_id = game_id;
         createTable(field);
@@ -213,7 +234,7 @@
     }
 
     async function postNew() {
-        const { elements } = document.getElementById("new_game");
+        const {elements} = document.getElementById("new_game");
         const button = elements.button;
 
         const body = {
@@ -238,7 +259,7 @@
         await post(
             "turn",
             body,
-            ({ field }) => updateTable(field)
+            ({field}) => updateTable(field)
         );
     }
 

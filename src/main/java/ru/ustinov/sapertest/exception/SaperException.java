@@ -10,11 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
  * @since 11.02.2024
  */
 @Getter
-public class SessionExpierdException extends ResponseStatusException {
+public class SaperException extends ResponseStatusException {
 
     private final String[] params;
 
-    public SessionExpierdException(HttpStatus status, String message, String... params) {
+    public SaperException(HttpStatus status, String message, String... params) {
         super(status, message);
         this.params = params;
     }

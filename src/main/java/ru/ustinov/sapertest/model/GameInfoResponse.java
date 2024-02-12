@@ -14,7 +14,7 @@ import java.util.Random;
  */
 @Data
 @JsonPropertyOrder({"game_id", "width", "height", "mines_count", "field", "completed"})
-public class Field {
+public class GameInfoResponse {
 
     @JsonProperty("game_id")
     private String gameId;
@@ -40,8 +40,7 @@ public class Field {
     @JsonIgnore
     private int countOfLeftCells;
 
-
-    public Field(int height, int width, int mines) {
+    public GameInfoResponse(int height, int width, int mines) {
         this.height = height;
         this.width = width;
         this.minesCount = mines;

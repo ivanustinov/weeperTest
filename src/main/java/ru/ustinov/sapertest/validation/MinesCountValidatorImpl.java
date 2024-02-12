@@ -9,7 +9,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import ru.ustinov.sapertest.to.NewFieldTo;
+import ru.ustinov.sapertest.to.NewGameRequest;
 
 import java.util.Objects;
 
@@ -21,7 +21,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @PropertySource("classpath:validation.properties")
-public class MinesCountValidatorImpl implements ConstraintValidator<MinesCountCheck, NewFieldTo> {
+public class MinesCountValidatorImpl implements ConstraintValidator<MinesCountCheck, NewGameRequest> {
 
     @Autowired
     private Environment env;
@@ -37,11 +37,11 @@ public class MinesCountValidatorImpl implements ConstraintValidator<MinesCountCh
     }
 
     @Override
-    public boolean isValid(NewFieldTo newFieldTo, ConstraintValidatorContext context) {
+    public boolean isValid(NewGameRequest newGameRequest, ConstraintValidatorContext context) {
         final int minFreeField = Integer.parseInt(Objects.requireNonNull(env.getProperty("valid.freeField.min")));
         final int minMinesCount = Integer.parseInt(Objects.requireNonNull(env.getProperty("valid.mines.min")));
-        final int maxCountMines = newFieldTo.getWidth() * newFieldTo.getHeight() - minFreeField;
-        final Integer minesCount = newFieldTo.getMinesCount();
+        final int maxCountMines = newGameRequest.getWidth() * newGameRequest.getHeight() - minFreeField;
+        final Integer minesCount = newGameRequest.getMinesCount();
         final boolean isValid = minesCount >= minMinesCount && minesCount <= maxCountMines;
         if (!isValid) {
             // Получаем сообщение из файла свойств и заполняем параметры

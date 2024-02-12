@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import ru.ustinov.sapertest.json.CharArraySerializer;
 //import ru.ustinov.sapertest.json.MineHiddenCharArraySerializer;
-import ru.ustinov.sapertest.model.Field;
+import ru.ustinov.sapertest.model.GameInfoResponse;
 
 /**
  * //TODO add comments.
@@ -67,10 +67,10 @@ public class Main {
 //        module.addSerializer(char[].class, new MineHiddenCharArraySerializer());
         objectMapper.registerModule(module);
 //        String dtoAsString = objectMapper.writer(filters).writeValueAsString(field);
-        Field fieldTotal = new Field(5, 5, 2);
-        openCell(fieldTotal.getMarked(), fieldTotal.getForPlayer(), 2, 2, fieldTotal.getCountOfLeftCells());
+        GameInfoResponse gameInfoResponseTotal = new GameInfoResponse(5, 5, 2);
+        openCell(gameInfoResponseTotal.getMarked(), gameInfoResponseTotal.getForPlayer(), 2, 2, gameInfoResponseTotal.getCountOfLeftCells());
 
-        System.out.println(objectMapper.writeValueAsString(fieldTotal));
+        System.out.println(objectMapper.writeValueAsString(gameInfoResponseTotal));
         
         
 //        char[] chars = {'0', '0', '1', '1', '1', '0', '0', '0', '0', '0'};

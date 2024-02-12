@@ -13,7 +13,7 @@ import ru.ustinov.sapertest.validation.MinesCountCheck;
  */
 @Data
 @MinesCountCheck(messageCode = "valid.mine_count.message")
-public class NewFieldTo {
+public class NewGameRequest {
 
     @NotNull
     @Range(min = 2, max = 30, message = "ширина поля должна быть не менее {min} и не более {max}")

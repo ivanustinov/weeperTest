@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ustinov.sapertest.model.Field;
-import ru.ustinov.sapertest.validation.TurnValidator;
+import ru.ustinov.sapertest.model.GameInfoResponse;
+import ru.ustinov.sapertest.validation.GameTurnRequestValidator;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -18,7 +18,7 @@ import ru.ustinov.sapertest.validation.TurnValidator;
 public class FieldService {
 
     @Autowired
-    private final TurnValidator turnValidator;
+    private final GameTurnRequestValidator gameTurnRequestValidator;
 
     private final ThreadLocal<int[][]> directionsThreadLocal = ThreadLocal.withInitial(() ->
             new int[][]{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}});
@@ -27,27 +27,27 @@ public class FieldService {
         return directionsThreadLocal.get();
     }
 
-    public Field turn(Field field, int row, int col) {
-        turnValidator.turnCheck(field.getForPlayer(), row, col);
-        final char[][] marked = field.getMarked();
-        char[][] forPlayer = field.getForPlayer();
+    public GameInfoResponse turn(GameInfoResponse gameInfoResponse, int row, int col) {
+        gameTurnRequestValidator.turnCheck(gameInfoResponse.getForPlayer(), row, col);
+        final char[][] marked = gameInfoResponse.getMarked();
+        char[][] forPlayer = gameInfoResponse.getForPlayer();
         // Проверка на подрыв
         if (marked[row][col] == 'X') {
             log.info("Окончание игры с uuid = {}, подрыв на клетке с координатами строка:{}, столбец:{}"
-                    ,field.getGameId(), row, col);
-            field.setForPlayer(marked);
-            field.setCompleted(true);
+                    , gameInfoResponse.getGameId(), row, col);
+            gameInfoResponse.setForPlayer(marked);
+            gameInfoResponse.setCompleted(true);
         } else {
-            final int leftCells = openCell(marked, forPlayer, row, col, field.getCountOfLeftCells());
+            final int leftCells = openCell(marked, forPlayer, row, col, gameInfoResponse.getCountOfLeftCells());
             if (leftCells == 0) {
                 log.info("Окончание игры с победой!");
                 // Открываем мины игроку после победы
-                mapMineFieldForWinner(forPlayer, field.getCoordinatesOfMines());
+                mapMineFieldForWinner(forPlayer, gameInfoResponse.getCoordinatesOfMines());
             }
-            field.setCompleted(leftCells == 0);
-            field.setCountOfLeftCells(leftCells);
+            gameInfoResponse.setCompleted(leftCells == 0);
+            gameInfoResponse.setCountOfLeftCells(leftCells);
         }
-        return field;
+        return gameInfoResponse;
     }
 
     public int openCell(char[][] marked, char[][] forPlayer, int row, int col, int countOfLeftCells) {

@@ -2,7 +2,7 @@ package ru.ustinov.sapertest.validation;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import ru.ustinov.sapertest.exception.SessionExpierdException;
+import ru.ustinov.sapertest.exception.SaperException;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -10,7 +10,7 @@ import ru.ustinov.sapertest.exception.SessionExpierdException;
  * @since 12.02.2024
  */
 @Component
-public class TurnValidator {
+public class GameTurnRequestValidator {
 
     public void turnCheck(char[][] field, int row, int col) {
         final int rows = field.length;
@@ -22,19 +22,19 @@ public class TurnValidator {
 
     public void turnRowCheck(int rows, int row) {
         if (row >= rows && row < 0) {
-            throw new SessionExpierdException(HttpStatus.BAD_REQUEST, "valid.turn_row.message", String.valueOf(rows));
+            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_row.message", String.valueOf(rows));
         }
     }
 
     public void turnColCheck(int cols, int col) {
         if (col >= cols && col < 0) {
-            throw new SessionExpierdException(HttpStatus.BAD_REQUEST, "valid.turn_col.message", String.valueOf(cols));
+            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_col.message", String.valueOf(cols));
         }
     }
 
     public void checkIsCellOpened(char[][] field, int row, int col) {
         if (field[row][col] != ' ') {
-            throw new SessionExpierdException(HttpStatus.BAD_REQUEST, "valid.turn_cell_opened.message");
+            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_cell_opened.message");
         }
     }
 

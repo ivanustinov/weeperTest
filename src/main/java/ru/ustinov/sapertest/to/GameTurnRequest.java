@@ -11,7 +11,7 @@ import lombok.Data;
  * @since 09.02.2024
  */
 @Data
-public class TurnTo {
+public class GameTurnRequest {
 
     @NotNull
     private Integer col;
