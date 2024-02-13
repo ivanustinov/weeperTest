@@ -20,6 +20,7 @@ import ru.ustinov.sapertest.exception.SaperException;
 import java.util.*;
 
 /**
+ * Обработка ошибок валидации и выбрасываемых исключений
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
  * @version 1.0
  * @since 11.02.2024

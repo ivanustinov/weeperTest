@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ustinov.sapertest.json.CharArraySerializer;
@@ -21,18 +22,24 @@ import java.util.Random;
 public class GameInfoResponse {
 
     @JsonProperty("game_id")
+    @Schema(description = "ID игры", example = "01234567-89AB-CDEF-0123-456789ABCDEF")
     private String gameId;
 
+    @Schema(description = "Ширина поля", example = "10")
     private int height;
 
+    @Schema(description = "Высота поля", example = "10")
     private int width;
 
+    @Schema(description = "Количество мин", example = "20")
     @JsonProperty("mines_count")
     private int minesCount;
 
     @JsonIgnore
     private char[][] marked;
 
+    //Можно было сделать String[][] и не заморачиваться за CharArraySerislizer
+    @Schema(description = "Игровое поле")
     @JsonProperty("field")
     @JsonSerialize(using = CharArraySerializer.class)
     private char[][] forPlayer;
@@ -40,6 +47,7 @@ public class GameInfoResponse {
     @JsonIgnore
     private int[][] coordinatesOfMines;
 
+    @Schema(description = "Завершена ли игра")
     private boolean completed;
 
     @JsonIgnore
@@ -53,6 +61,12 @@ public class GameInfoResponse {
         createFields(height, width, mines);
     }
 
+    /**
+     * Инициализация игрового поля в соответствии со входными параметрами
+     * @param height высота поля
+     * @param width ширина поля
+     * @param mines количество мин
+     */
     private void createFields(int height, int width, int mines) {
         this.marked = new char[height][width];
         this.forPlayer = new char[height][width];
@@ -87,6 +101,14 @@ public class GameInfoResponse {
 
     }
 
+    /**
+     * Подсчет мин вокруг ячейки поля
+     * @param field игровоее поле
+     * @param directions окружающие ячейки
+     * @param row ряд ячейки для подсчета
+     * @param col клолнка ячейки для подсчета
+     * @return количество мин вокруг ячейки
+     */
     private int countOfMinesAround(char[][] field, int[][] directions, int row, int col) {
         int count = 0;
         int numRows = field.length, numCols = field[0].length;

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import java.lang.annotation.*;
 
 /**
+ * Аннотация для валдидации количества мин в зависимости от размеров поля и минимального
+ * количества свободных ячеек
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
  * @version 1.0
  * @since 09.02.2024

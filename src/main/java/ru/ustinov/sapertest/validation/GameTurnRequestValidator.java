@@ -14,6 +14,13 @@ import static ru.ustinov.sapertest.SaperExceptionHandler.*;
 @Component
 public class GameTurnRequestValidator {
 
+
+    /**
+     * Проверка на выход за границы поля и на повторный ход
+     * @param field игровое поле
+     * @param row ряд хода
+     * @param col колонка хода
+     */
     public void turnCheck(char[][] field, int row, int col) {
         final int rows = field.length;
         final int cols = field[0].length;

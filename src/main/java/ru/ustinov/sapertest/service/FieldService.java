@@ -27,6 +27,13 @@ public class FieldService {
         return directionsThreadLocal.get();
     }
 
+    /**
+     * Ход ирока
+     * @param gameInfoResponse возвращаемое значение сущности текущей игры
+     * @param row значение ряда хода
+     * @param col значение колонки хода
+     * @return текущее состояне игры после хода
+     */
     public GameInfoResponse turn(GameInfoResponse gameInfoResponse, int row, int col) {
         gameTurnRequestValidator.turnCheck(gameInfoResponse.getForPlayer(), row, col);
         final char[][] marked = gameInfoResponse.getMarked();
@@ -50,6 +57,15 @@ public class FieldService {
         return gameInfoResponse;
     }
 
+    /**
+     * Рекурсивное открытие ячеек
+     * @param marked размеченное поле
+     * @param forPlayer поле для отображения игроку
+     * @param row строка хода
+     * @param col колонка хода
+     * @param countOfLeftCells оставшиеся неоткрытые незаминированные клетки
+     * @return количество оставшихся незаминированныъ ячеек
+     */
     public int openCell(char[][] marked, char[][] forPlayer, int row, int col, int countOfLeftCells) {
         int numRows = marked.length, numCols = marked[0].length;
         // Проверка выхода за границы массива и что поле еще не открыто
@@ -74,6 +90,11 @@ public class FieldService {
         return countOfLeftCells;
     }
 
+    /**
+     * Открытие заминированных ячеек при выигрыше
+     * @param forPlayer отображение поля для игрока
+     * @param coordinatesOfMines координаты заминированных ячеек
+     */
     public void mapMineFieldForWinner(char[][] forPlayer, int[][] coordinatesOfMines) {
         for (int[] coordinatesOfMine : coordinatesOfMines) {
             final int row = coordinatesOfMine[0];
