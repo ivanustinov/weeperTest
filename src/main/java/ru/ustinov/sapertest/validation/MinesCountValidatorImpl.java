@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -45,8 +44,8 @@ public class MinesCountValidatorImpl implements ConstraintValidator<MinesCountCh
         final boolean isValid = minesCount >= minMinesCount && minesCount <= maxCountMines;
         if (!isValid) {
             // Получаем сообщение из файла свойств и заполняем параметры
-            final Object[] params = {minMinesCount, maxCountMines};
-            String message = messageSourceAccessor.getMessage(messageCode, params, LocaleContextHolder.getLocale());
+            final String[] params = new String[]{String.valueOf(minMinesCount), String.valueOf(maxCountMines)};
+            String message = messageSourceAccessor.getMessage(messageCode, params);
             // Подставляем сообщение в контекст валидации
             context.buildConstraintViolationWithTemplate(message).addConstraintViolation().disableDefaultConstraintViolation();
         }
