@@ -48,7 +48,7 @@ public class MinesCountValidatorImpl implements ConstraintValidator<MinesCountCh
             final Object[] params = {minMinesCount, maxCountMines};
             String message = messageSourceAccessor.getMessage(messageCode, params, LocaleContextHolder.getLocale());
             // Подставляем сообщение в контекст валидации
-            context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(message).addConstraintViolation().disableDefaultConstraintViolation();
         }
         return isValid;
     }

@@ -2,9 +2,13 @@ package ru.ustinov.sapertest.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 import ru.ustinov.sapertest.validation.MinesCountCheck;
+
+import static ru.ustinov.sapertest.SaperExceptionHandler.NEW_GAME_MINE_COUNT_CHECK;
 
 /***
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -12,7 +16,9 @@ import ru.ustinov.sapertest.validation.MinesCountCheck;
  * @since 09.02.2024
  */
 @Data
-@MinesCountCheck(messageCode = "valid.mine_count.message")
+@MinesCountCheck(messageCode = NEW_GAME_MINE_COUNT_CHECK)
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewGameRequest {
 
     @NotNull

@@ -11,13 +11,17 @@ import java.io.IOException;
  * @version 1.0
  * @since 10.02.2024
  */
-public class CharArraySerializer extends JsonSerializer<char[]> {
+public class CharArraySerializer extends JsonSerializer<char[][]> {
 
     @Override
-    public void serialize(char[] value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(char[][] value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartArray();
-        for (char c : value) {
-            gen.writeString(String.valueOf(c));
+        for (char[] chars : value) {
+            gen.writeStartArray();
+            for (char aChar : chars) {
+                gen.writeString(String.valueOf(aChar));
+            }
+            gen.writeEndArray();
         }
         gen.writeEndArray();
     }

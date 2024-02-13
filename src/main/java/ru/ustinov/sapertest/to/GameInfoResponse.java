@@ -1,9 +1,12 @@
-package ru.ustinov.sapertest.model;
+package ru.ustinov.sapertest.to;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.ustinov.sapertest.json.CharArraySerializer;
 
 import java.util.Random;
 
@@ -14,6 +17,7 @@ import java.util.Random;
  */
 @Data
 @JsonPropertyOrder({"game_id", "width", "height", "mines_count", "field", "completed"})
+@NoArgsConstructor
 public class GameInfoResponse {
 
     @JsonProperty("game_id")
@@ -30,6 +34,7 @@ public class GameInfoResponse {
     private char[][] marked;
 
     @JsonProperty("field")
+    @JsonSerialize(using = CharArraySerializer.class)
     private char[][] forPlayer;
 
     @JsonIgnore

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ustinov.sapertest.model.GameInfoResponse;
+import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.validation.GameTurnRequestValidator;
 
 /**

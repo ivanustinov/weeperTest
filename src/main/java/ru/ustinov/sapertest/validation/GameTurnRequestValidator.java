@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.ustinov.sapertest.exception.SaperException;
 
+import static ru.ustinov.sapertest.SaperExceptionHandler.*;
+
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
  * @version 1.0
@@ -15,26 +17,20 @@ public class GameTurnRequestValidator {
     public void turnCheck(char[][] field, int row, int col) {
         final int rows = field.length;
         final int cols = field[0].length;
-        turnRowCheck(rows, row);
-        turnColCheck(cols, col);
-        checkIsCellOpened(field, row, col);
-    }
-
-    public void turnRowCheck(int rows, int row) {
-        if (row >= rows && row < 0) {
-            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_row.message", String.valueOf(rows));
+        String messageCode = null;
+        String[] params = null;
+        if (row >= rows || row < 0) {
+            messageCode = TURN_ROW_ERROR;
+            params = new String[]{String.valueOf(rows)};
+        } else if (col >= cols || col < 0) {
+            messageCode = TURN_COL_ERROR;
+            params = new String[]{String.valueOf(cols)};
+        } else if (field[row][col] != ' ') {
+            messageCode = TURN_CELL_OPENED;
+            params = new String[]{};
         }
-    }
-
-    public void turnColCheck(int cols, int col) {
-        if (col >= cols && col < 0) {
-            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_col.message", String.valueOf(cols));
-        }
-    }
-
-    public void checkIsCellOpened(char[][] field, int row, int col) {
-        if (field[row][col] != ' ') {
-            throw new SaperException(HttpStatus.BAD_REQUEST, "valid.turn_cell_opened.message");
+        if (messageCode != null) {
+            throw new SaperException(HttpStatus.BAD_REQUEST, messageCode, params);
         }
     }
 

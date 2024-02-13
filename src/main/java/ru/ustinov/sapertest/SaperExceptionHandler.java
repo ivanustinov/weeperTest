@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,9 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.ustinov.sapertest.exception.SaperException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -29,6 +28,12 @@ import java.util.Objects;
 @RestControllerAdvice
 @AllArgsConstructor
 public class SaperExceptionHandler extends ResponseEntityExceptionHandler {
+
+    public static final String TURN_ROW_ERROR = "valid.turn_row.message";
+    public static final String TURN_COL_ERROR = "valid.turn_col.message";
+    public static final String TURN_CELL_OPENED = "valid.turn_cell_opened.message";
+    public static final String NEW_GAME_MINE_COUNT_CHECK = "valid.mine_count.message";
+    public static final String SESSION_EXPIRED = "session_expired.message";
 
     @Autowired
     private final MessageSourceAccessor messageSourceAccessor;
@@ -50,13 +55,16 @@ public class SaperExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handleBindingErrors(BindingResult result) {
-        String[] msg = result.getAllErrors().stream().map(messageSourceAccessor::getMessage).toArray(String[]::new);
-        Map<String, Object> body = new HashMap<>();
-        StringBuilder message = new StringBuilder();
-        for (String s : msg) {
-            message.append(s).append("\n");
+        final Optional<ObjectError> first = result.getAllErrors().stream().findFirst();
+        final List<ObjectError> allErrors = result.getAllErrors();
+        for (ObjectError allError : allErrors) {
+            System.out.println(allError);
         }
-        body.put("error", message.toString());
+        Map<String, Object> body = new HashMap<>();
+        if (first.isPresent()) {
+            final String message = messageSourceAccessor.getMessage(first.get());
+            body.put("error", message);
+        }
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
     }
 
