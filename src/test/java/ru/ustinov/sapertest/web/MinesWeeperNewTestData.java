@@ -18,7 +18,7 @@ import java.util.UUID;
  * @since 12.02.2024
  */
 @Getter
-public class MinesWeeperTestData {
+public class MinesWeeperNewTestData {
 
     // Статическая переменная для хранения свойств
     private static Properties properties;
@@ -32,24 +32,14 @@ public class MinesWeeperTestData {
 
     public static String maxMinCountStr;
 
-    public static final GameTurnRequest firstTurnRequest = new GameTurnRequest(1, 1, gameId);
-    public static final GameTurnRequest secondTurnRequest = new GameTurnRequest(2, 2, gameId);
-    public static final GameTurnRequest winnerTurnRequest = new GameTurnRequest(0, 2, gameId);
-    public static final GameTurnRequest loserTurnRequest = new GameTurnRequest(0, 0, gameId);
-
     public static final GameTurnRequest openedTurnRequest = new GameTurnRequest(0, 0, gameId);
     public static final GameTurnRequest outOfWidhtTurnRequest = new GameTurnRequest(0, 3, gameId);
     public static final GameTurnRequest outOfHeightTurnRequest = new GameTurnRequest(3, 0, gameId);
 
     public static final GameInfoResponse gameInfo = new GameInfoResponse();
 
-    public static final char [][] field = {{'X', '2', '0'}, {'X', '2', '0'}, {'1', '1', '0'}};
-    public static final int[][] coordinatesOfMInes = {{0, 0}, {0,1}};
     public static final char [][] forPlayerStart;
-    public static final char [][] forPlayerTurnWithNumber = {{' ', ' ', ' '}, {' ', '2', ' '}, {' ', ' ', ' '}};
-    public static final char [][] forPlayerTurnWithZero = {{' ', '2', '0'}, {' ', '2', '0'}, {' ', '1', '0'}};
-    public static final char [][] forPlayerWinnerTurn = {{'M', '2', '0'}, {'M', '2', '0'}, {'1', '1', '0'}};
-    public static final char [][] forPlayerLoserTurn = {{'X', '2', '0'}, {'X', '2', '0'}, {'1', '1', '0'}};
+
 
     // Статический блок инициализации для загрузки свойств из файла
     static {

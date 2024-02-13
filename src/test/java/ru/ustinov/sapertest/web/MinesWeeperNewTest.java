@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.ustinov.sapertest.web.MinesWeeperTestData.*;
+import static ru.ustinov.sapertest.web.MinesWeeperNewTestData.*;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -21,7 +21,7 @@ import static ru.ustinov.sapertest.web.MinesWeeperTestData.*;
  * @since 12.02.2024
  */
 @PropertySource("classpath:validation.properties")
-class MinesWeeperControllerTest extends AbstractControllerTest {
+class MinesWeeperNewTest extends AbstractControllerTest {
 
     public static final String NEW_URL = "/new";
 
@@ -60,7 +60,7 @@ class MinesWeeperControllerTest extends AbstractControllerTest {
     void invalidWidthStartGame() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(MinesWeeperTestData.invalidWidthGameRequest)))
+                .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidWidthGameRequest)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error")
                         .value(messageSourceAccessor
@@ -72,7 +72,7 @@ class MinesWeeperControllerTest extends AbstractControllerTest {
     void invalidHeightStartGame() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(MinesWeeperTestData.invalidHeightGameRequest)))
+                .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidHeightGameRequest)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error")
                         .value(messageSourceAccessor
@@ -92,38 +92,4 @@ class MinesWeeperControllerTest extends AbstractControllerTest {
                 .andDo(print());
     }
 
-//    @Test
-//    void invalidMinecountStartGame() throws Exception {
-//        final String minCountOfFreeCells = this.minCountOfFreeCells;
-//        final int totalCells = invalidMineCountGameRequest.getHeight() * invalidMineCountGameRequest.getWidth();
-//        final int i = i1 - minCountOfFreeCells;
-//        ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(JsonUtil.writeValue(MinesWeeperTestData.invalidMineCountGameRequest)))
-//                .andExpect(status().isUnprocessableEntity())
-//                .andExpect(jsonPath("$.error")
-//                        .value(messageSourceAccessor.getMessage(NEW_GAME_MINE_COUNT_CHECK, minMinesCount, )))
-//                .andDo(print());
-//    }
-
-//    @Test
-//    void turn() throws Exception {
-//        // Создаем фиктивную сессию
-//        MockHttpSession session = new MockHttpSession();
-//        final GameTurnRequest gameTurnRequest = MinesWeeperTestData.firstTurnRequest;
-//        // Замокируем поведение session.getAttribute(...)
-//        final GameInfoResponse gameResponse = MinesWeeperTestData.getGame();
-//        final String gameId = gameResponse.getGameId();
-//        session.setAttribute(gameId, gameResponse);
-//        gameTurnRequest.setGameId(gameId);
-//        final String s = JsonUtil.writeValue(gameTurnRequest);
-//        System.out.println(s);
-//        ResultActions action = perform(MockMvcRequestBuilders.post(TURN_URL)
-//                .session(session)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(s))
-//                .andDo(print())
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.game_id").value(gameId));
-//    }
 }
