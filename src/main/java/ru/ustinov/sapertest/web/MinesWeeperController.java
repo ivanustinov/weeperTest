@@ -1,11 +1,5 @@
 package ru.ustinov.sapertest.web;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ustinov.sapertest.exception.SaperException;
-import ru.ustinov.sapertest.to.ErrorResopnse;
+import ru.ustinov.sapertest.service.TurnServiceImpl;
 import ru.ustinov.sapertest.to.GameInfoResponse;
-import ru.ustinov.sapertest.service.FieldService;
-import ru.ustinov.sapertest.to.NewGameRequest;
 import ru.ustinov.sapertest.to.GameTurnRequest;
+import ru.ustinov.sapertest.to.NewGameRequest;
 
 import java.util.UUID;
 
@@ -38,13 +31,13 @@ import static ru.ustinov.sapertest.SaperExceptionHandler.SESSION_EXPIRED;
 public class MinesWeeperController implements ControllerApi {
 
     @Autowired
-    private FieldService fieldService;
+    private TurnServiceImpl turnServiceImpl;
 
 
     @PostMapping("/new")
     public GameInfoResponse startGame(@Valid @RequestBody NewGameRequest request, HttpSession session) {
         final GameInfoResponse response = new GameInfoResponse(request.getHeight()
-                , request.getWidth(), request.getMinesCount());
+            , request.getWidth(), request.getMinesCount());
         response.setGameId(UUID.randomUUID().toString());
         log.info("В сессию c id = {} сохраняется новое поле с uuid = {}", session.getId(), response.getGameId());
         // Сохраняем объект GameInfoResponse в сессии
@@ -64,7 +57,7 @@ public class MinesWeeperController implements ControllerApi {
         if (gameInfoResponse == null) {
             throw new SaperException(HttpStatus.BAD_REQUEST, SESSION_EXPIRED, gameId);
         }
-        return fieldService.turn(gameInfoResponse, request.getRow(), request.getCol());
+        return turnServiceImpl.turn(gameInfoResponse, request.getRow(), request.getCol());
     }
 
 }

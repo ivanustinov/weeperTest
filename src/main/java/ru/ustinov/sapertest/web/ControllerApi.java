@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.ustinov.sapertest.to.ErrorResopnse;
 import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.to.GameTurnRequest;

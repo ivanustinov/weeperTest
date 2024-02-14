@@ -15,7 +15,7 @@ import ru.ustinov.sapertest.validation.GameTurnRequestValidator;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class FieldService {
+public class TurnServiceImpl implements TurnService{
 
     @Autowired
     private final GameTurnRequestValidator gameTurnRequestValidator;
@@ -34,6 +34,7 @@ public class FieldService {
      * @param col значение колонки хода
      * @return текущее состояне игры после хода
      */
+    @Override
     public GameInfoResponse turn(GameInfoResponse gameInfoResponse, int row, int col) {
         gameTurnRequestValidator.turnCheck(gameInfoResponse.getForPlayer(), row, col);
         final char[][] marked = gameInfoResponse.getMarked();
