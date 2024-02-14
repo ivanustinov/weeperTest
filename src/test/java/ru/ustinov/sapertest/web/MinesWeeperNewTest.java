@@ -58,7 +58,7 @@ class MinesWeeperNewTest extends AbstractControllerTest {
 
     @Test
     void invalidWidthStartGame() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
+        perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidWidthGameRequest)))
                 .andExpect(status().isBadRequest())
@@ -70,7 +70,7 @@ class MinesWeeperNewTest extends AbstractControllerTest {
 
     @Test
     void invalidHeightStartGame() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
+        perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidHeightGameRequest)))
                 .andExpect(status().isBadRequest())
