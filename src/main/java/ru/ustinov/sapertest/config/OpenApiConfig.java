@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "Игра Сапёр (Minesweeper)",
                 version = "1.0",
-                description = "Игра Сапёр (Minesweeper)",
                 contact = @Contact(url = "https://github.com/ivanustinov", name = "Ivan Ustinov",
                         email = "ivanustinov1985@yandex.ru")
         )

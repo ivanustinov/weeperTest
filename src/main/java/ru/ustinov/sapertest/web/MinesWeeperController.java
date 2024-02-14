@@ -39,17 +39,17 @@ public class MinesWeeperController {
     @Operation(summary = "Начало новой игры")
     @PostMapping("/new")
     public GameInfoResponse startGame(@Valid @RequestBody NewGameRequest request, HttpSession session) {
-        final GameInfoResponse responce = new GameInfoResponse(request.getHeight()
+        final GameInfoResponse response = new GameInfoResponse(request.getHeight()
                 , request.getWidth(), request.getMinesCount());
-        responce.setGameId(UUID.randomUUID().toString());
-        log.info("В сессию c id = {} сохраняется новое поле с uuid = {}", session.getId(), responce.getGameId());
+        response.setGameId(UUID.randomUUID().toString());
+        log.info("В сессию c id = {} сохраняется новое поле с uuid = {}", session.getId(), response.getGameId());
         // Сохраняем объект GameInfoResponse в сессии
-        session.setAttribute(responce.getGameId(), responce);
+        session.setAttribute(response.getGameId(), response);
         if (session.isNew()) {
             // Устанавливаем время сессии 1 минуту(60 секунд)
             session.setMaxInactiveInterval(60);
         }
-        return responce;
+        return response;
     }
 
     @Operation(summary = "Ход пользователя")

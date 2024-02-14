@@ -61,7 +61,7 @@ class MinesWeeperNewTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidWidthGameRequest)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error")
                         .value(messageSourceAccessor
                                 .getMessage("valid.width.interval", new String[]{minWidth, maxWidth})))
@@ -73,7 +73,7 @@ class MinesWeeperNewTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(MinesWeeperNewTestData.invalidHeightGameRequest)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error")
                         .value(messageSourceAccessor
                                 .getMessage("valid.height.interval", new String[]{minHeight, maxHeight})))
@@ -85,7 +85,7 @@ class MinesWeeperNewTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.post(NEW_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalidMineCountGameRequest)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error")
                         .value(messageSourceAccessor
                                 .getMessage("valid.mine_count.message", new String[]{minMinesCount, maxMinCountStr})))

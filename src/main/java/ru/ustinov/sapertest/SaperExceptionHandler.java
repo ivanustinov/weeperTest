@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.ustinov.sapertest.exception.SaperException;
+import ru.ustinov.sapertest.to.ErrorResopnse;
 
 import java.util.*;
 
@@ -50,23 +51,18 @@ public class SaperExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("SessionExpieredException ", ex);
         final String messagCode = Objects.requireNonNull(ex.getReason());
         final String message = messageSourceAccessor.getMessage(messagCode, ex.getParams());
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", message);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        final ErrorResopnse errorResopnse = new ErrorResopnse(message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResopnse);
     }
 
     private ResponseEntity<Object> handleBindingErrors(BindingResult result) {
         final Optional<ObjectError> first = result.getAllErrors().stream().findFirst();
-        final List<ObjectError> allErrors = result.getAllErrors();
-        for (ObjectError allError : allErrors) {
-            System.out.println(allError);
-        }
-        Map<String, Object> body = new HashMap<>();
+        String message = "";
         if (first.isPresent()) {
-            final String message = messageSourceAccessor.getMessage(first.get());
-            body.put("error", message);
+             message = messageSourceAccessor.getMessage(first.get());
         }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
+        final ErrorResopnse errorResopnse = new ErrorResopnse(message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResopnse);
     }
 
 }
