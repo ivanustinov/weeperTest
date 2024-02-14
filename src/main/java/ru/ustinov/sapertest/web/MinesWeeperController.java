@@ -33,19 +33,14 @@ import static ru.ustinov.sapertest.SaperExceptionHandler.SESSION_EXPIRED;
  * @since 09.02.2024
  */
 @Slf4j
-@Tag(name = "Minesweeper")
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class MinesWeeperController {
+public class MinesWeeperController implements ControllerApi {
 
     @Autowired
     private FieldService fieldService;
 
-    @Operation(summary = "Начало новой игры", responses = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "400", description = "Ошибка запроса или некорректное действие"
-                    , content = @Content(schema = @Schema(implementation = ErrorResopnse.class)))
-    })
+
     @PostMapping("/new")
     public GameInfoResponse startGame(@Valid @RequestBody NewGameRequest request, HttpSession session) {
         final GameInfoResponse response = new GameInfoResponse(request.getHeight()
@@ -55,17 +50,12 @@ public class MinesWeeperController {
         // Сохраняем объект GameInfoResponse в сессии
         session.setAttribute(response.getGameId(), response);
         if (session.isNew()) {
-            // Устанавливаем время сессии 1 минуту(60 секунд)
             session.setMaxInactiveInterval(60);
         }
         return response;
     }
 
-    @Operation(summary = "Ход пользователя", responses = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "400", description = "Ошибка запроса или некорректное действие"
-                    , content = @Content(schema = @Schema(implementation = ErrorResopnse.class)))
-    })
+
     @PostMapping("/turn")
     public GameInfoResponse turn(@Valid @RequestBody GameTurnRequest request, HttpSession session) {
         final String gameId = request.getGameId();

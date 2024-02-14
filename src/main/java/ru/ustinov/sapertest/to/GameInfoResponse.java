@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ustinov.sapertest.json.CharArraySerializer;
@@ -21,24 +22,30 @@ import java.util.Random;
 @NoArgsConstructor
 public class GameInfoResponse {
 
+
+    @NotNull
     @JsonProperty("game_id")
     @Schema(description = "ID игры", example = "01234567-89AB-CDEF-0123-456789ABCDEF")
     private String gameId;
 
+    @NotNull
     @Schema(description = "Ширина поля", example = "10")
-    private int height;
+    private Integer height;
 
+    @NotNull
     @Schema(description = "Высота поля", example = "10")
-    private int width;
+    private Integer width;
 
+    @NotNull
     @Schema(description = "Количество мин", example = "20")
     @JsonProperty("mines_count")
-    private int minesCount;
+    private Integer minesCount;
 
     @JsonIgnore
     private char[][] marked;
 
     //Можно было сделать String[][] и не заморачиваться за CharArraySerislizer
+    @NotNull
     @Schema(description = "Игровое поле")
     @JsonProperty("field")
     @JsonSerialize(using = CharArraySerializer.class)
