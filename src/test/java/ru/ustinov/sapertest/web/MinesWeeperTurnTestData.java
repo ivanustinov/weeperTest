@@ -1,9 +1,12 @@
 package ru.ustinov.sapertest.web;
 
+import ru.ustinov.sapertest.to.FieldEnum;
 import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.to.GameTurnRequest;
 
 import java.util.UUID;
+
+import static ru.ustinov.sapertest.to.FieldEnum.*;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -26,11 +29,11 @@ public class MinesWeeperTurnTestData {
 
     public static final int[][] coordinatesOfMInes = {{0, 0}, {1, 0}};
 
-    public static final char [][] marked = {{'X', '2', '0'}, {'X', '2', '0'}, {'1', '1', '0'}};
-    public static final char [][] forPlayerTurnWithNumber = {{' ', ' ', ' '}, {' ', '2', ' '}, {' ', ' ', ' '}};
-    public static final char [][] forPlayerTurnWithZero = {{' ', '2', '0'}, {' ', '2', '0'}, {' ', '1', '0'}};
-    public static final char [][] forPlayerWinnerTurn = {{'M', '2', '0'}, {'M', '2', '0'}, {'1', '1', '0'}};
-    public static final char [][] forPlayerLoserTurn = {{'X', '2', '0'}, {'X', '2', '0'}, {'1', '1', '0'}};
+    public static final FieldEnum[][] marked = {{X, _2, _0}, {X, _2, _0}, {_1, _1, _0}};
+    public static final FieldEnum [][] forPlayerTurnWithNumber = {{SPACE, SPACE, SPACE}, {SPACE, _2, SPACE}, {SPACE, SPACE, SPACE}};
+    public static final FieldEnum [][] forPlayerTurnWithZero = {{SPACE, _2, _0}, {SPACE, _2, _0}, {SPACE, _1, _0}};
+    public static final FieldEnum [][] forPlayerWinnerTurn = {{M, _2, _0}, {M, _2, _0}, {_1, _1, _0}};
+    public static final FieldEnum [][] forPlayerLoserTurn = {{X, _2, _0}, {X, _2, _0}, {_1, _1, _0}};
 
     static {
         game.setGameId(gameId);

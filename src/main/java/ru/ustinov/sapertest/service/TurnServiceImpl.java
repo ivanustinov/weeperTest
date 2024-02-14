@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.ustinov.sapertest.to.FieldEnum;
 import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.validation.GameTurnRequestValidator;
+
+import static ru.ustinov.sapertest.to.FieldEnum.*;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -37,10 +40,10 @@ public class TurnServiceImpl implements TurnService{
     @Override
     public GameInfoResponse turn(GameInfoResponse gameInfoResponse, int row, int col) {
         gameTurnRequestValidator.turnCheck(gameInfoResponse.getForPlayer(), row, col);
-        final char[][] marked = gameInfoResponse.getMarked();
-        char[][] forPlayer = gameInfoResponse.getForPlayer();
+        final FieldEnum[][] marked = gameInfoResponse.getMarked();
+        FieldEnum[][] forPlayer = gameInfoResponse.getForPlayer();
         // Проверка на подрыв
-        if (marked[row][col] == 'X') {
+        if (marked[row][col] == X) {
             log.info("Окончание игры с uuid = {}, подрыв на клетке с координатами строка:{}, столбец:{}"
                     , gameInfoResponse.getGameId(), row, col);
             gameInfoResponse.setForPlayer(marked);
@@ -67,7 +70,7 @@ public class TurnServiceImpl implements TurnService{
      * @param countOfLeftCells оставшиеся неоткрытые незаминированные клетки
      * @return количество оставшихся незаминированныъ ячеек
      */
-    public int openCell(char[][] marked, char[][] forPlayer, int row, int col, int countOfLeftCells) {
+    public int openCell(FieldEnum[][] marked, FieldEnum[][] forPlayer, int row, int col, int countOfLeftCells) {
         int numRows = marked.length, numCols = marked[0].length;
         // Проверка выхода за границы массива и что поле еще не открыто
         if (row >= 0 && row < numRows && col >= 0 && col < numCols && marked[row][col] != forPlayer[row][col]) {
@@ -76,7 +79,7 @@ public class TurnServiceImpl implements TurnService{
             // Убавляем счетчик оставшихся ячеек игрового поля
             countOfLeftCells--;
             // Если нет вокруг мин и игра не закончилась, начинаем рекурсивный обход соседних ячеек
-            if (forPlayer[row][col] == '0' && countOfLeftCells != 0) {
+            if (forPlayer[row][col] == _0 && countOfLeftCells != 0) {
                 final int[][] directions = getDirections();
                 for (int[] dir : directions) {
                     int newRow = row + dir[0];
@@ -96,11 +99,11 @@ public class TurnServiceImpl implements TurnService{
      * @param forPlayer отображение поля для игрока
      * @param coordinatesOfMines координаты заминированных ячеек
      */
-    public void mapMineFieldForWinner(char[][] forPlayer, int[][] coordinatesOfMines) {
+    public void mapMineFieldForWinner(FieldEnum[][] forPlayer, int[][] coordinatesOfMines) {
         for (int[] coordinatesOfMine : coordinatesOfMines) {
             final int row = coordinatesOfMine[0];
             final int col = coordinatesOfMine[1];
-            forPlayer[row][col] = 'M';
+            forPlayer[row][col] = M;
         }
     }
 

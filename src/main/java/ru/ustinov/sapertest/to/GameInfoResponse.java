@@ -3,14 +3,15 @@ package ru.ustinov.sapertest.to;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ustinov.sapertest.json.CharArraySerializer;
 
 import java.util.Random;
+
+import static ru.ustinov.sapertest.to.FieldEnum.SPACE;
+import static ru.ustinov.sapertest.to.FieldEnum.X;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -42,14 +43,14 @@ public class GameInfoResponse {
     private Integer minesCount;
 
     @JsonIgnore
-    private char[][] marked;
+    private FieldEnum[][] marked;
 
     //Можно было сделать String[][] и не заморачиваться за CharArraySerislizer
     @NotNull
     @Schema(description = "Игровое поле")
     @JsonProperty("field")
-    @JsonSerialize(using = CharArraySerializer.class)
-    private char[][] forPlayer;
+    private FieldEnum[][] forPlayer;
+
 
     @JsonIgnore
     private int[][] coordinatesOfMines;
@@ -70,21 +71,22 @@ public class GameInfoResponse {
 
     /**
      * Инициализация игрового поля в соответствии со входными параметрами
+     *
      * @param height высота поля
-     * @param width ширина поля
-     * @param mines количество мин
+     * @param width  ширина поля
+     * @param mines  количество мин
      */
     private void createFields(int height, int width, int mines) {
-        this.marked = new char[height][width];
-        this.forPlayer = new char[height][width];
+        this.marked = new FieldEnum[height][width];
+        this.forPlayer = new FieldEnum[height][width];
         this.coordinatesOfMines = new int[mines][2];
         // Размещение мин
         Random random = new Random();
         for (int i = 0; i < mines; i++) {
             int row = random.nextInt(height), col = random.nextInt(width);
             // Проверяем, не установлена ли уже мина в этой ячейке
-            if (this.marked[row][col] != 'X') {
-                this.marked[row][col] = 'X';
+            if (this.marked[row][col] != X) {
+                this.marked[row][col] = X;
                 // Записываем координаты мин
                 coordinatesOfMines[i][0] = row;
                 coordinatesOfMines[i][1] = col;
@@ -97,11 +99,12 @@ public class GameInfoResponse {
         final int[][] directions = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                this.forPlayer[i][j] = ' ';
-                if (this.marked[i][j] != 'X') {
+                this.forPlayer[i][j] = SPACE;
+                if (this.marked[i][j] != X) {
                     int count = countOfMinesAround(marked, directions, i, j);
                     // Маркируем ячейку в соответствии с количеством мин вокруг
-                    this.marked[i][j] = Character.forDigit(count, 10);
+                    final String name = "_" + count;
+                    this.marked[i][j] = FieldEnum.valueOf(name);
                 }
             }
         }
@@ -110,13 +113,14 @@ public class GameInfoResponse {
 
     /**
      * Подсчет мин вокруг ячейки поля
-     * @param field игровоее поле
+     *
+     * @param field      игровоее поле
      * @param directions окружающие ячейки
-     * @param row ряд ячейки для подсчета
-     * @param col клолнка ячейки для подсчета
+     * @param row        ряд ячейки для подсчета
+     * @param col        клолнка ячейки для подсчета
      * @return количество мин вокруг ячейки
      */
-    private int countOfMinesAround(char[][] field, int[][] directions, int row, int col) {
+    private int countOfMinesAround(FieldEnum[][] field, int[][] directions, int row, int col) {
         int count = 0;
         int numRows = field.length, numCols = field[0].length;
         // Массив смещений для соседних ячеек
@@ -124,10 +128,12 @@ public class GameInfoResponse {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
             // Проверяем, что новые координаты находятся в пределах поля и клетка заминирована
-            if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols && field[newRow][newCol] == 'X') {
+            if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols && field[newRow][newCol] == X) {
                 count++;
             }
         }
         return count;
     }
+
+
 }

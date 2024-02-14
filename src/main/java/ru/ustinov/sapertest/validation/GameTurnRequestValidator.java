@@ -3,8 +3,10 @@ package ru.ustinov.sapertest.validation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.ustinov.sapertest.exception.SaperException;
+import ru.ustinov.sapertest.to.FieldEnum;
 
 import static ru.ustinov.sapertest.SaperExceptionHandler.*;
+import static ru.ustinov.sapertest.to.FieldEnum.SPACE;
 
 /**
  * @author Ivan Ustinov(ivanustinov1985@yandex.ru)
@@ -21,7 +23,7 @@ public class GameTurnRequestValidator {
      * @param row ряд хода
      * @param col колонка хода
      */
-    public void turnCheck(char[][] field, int row, int col) {
+    public void turnCheck(FieldEnum[][] field, int row, int col) {
         final int rows = field.length;
         final int cols = field[0].length;
         String messageCode = null;
@@ -32,7 +34,7 @@ public class GameTurnRequestValidator {
         } else if (col >= cols || col < 0) {
             messageCode = TURN_COL_ERROR;
             params = new String[]{String.valueOf(cols)};
-        } else if (field[row][col] != ' ') {
+        } else if (field[row][col] != SPACE) {
             messageCode = TURN_CELL_OPENED;
             params = new String[]{};
         }

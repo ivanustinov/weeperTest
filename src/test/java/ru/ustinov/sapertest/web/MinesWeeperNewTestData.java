@@ -1,6 +1,7 @@
 package ru.ustinov.sapertest.web;
 
 import lombok.Getter;
+import ru.ustinov.sapertest.to.FieldEnum;
 import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.to.GameTurnRequest;
 import ru.ustinov.sapertest.to.NewGameRequest;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.UUID;
+
+import static ru.ustinov.sapertest.to.FieldEnum.SPACE;
 
 /**
  *
@@ -38,7 +41,7 @@ public class MinesWeeperNewTestData {
 
     public static final GameInfoResponse gameInfo = new GameInfoResponse();
 
-    public static final char [][] forPlayerStart;
+    public static final FieldEnum[][] forPlayerStart;
 
 
     // Статический блок инициализации для загрузки свойств из файла
@@ -72,10 +75,10 @@ public class MinesWeeperNewTestData {
         invalidHeightGameRequest = new NewGameRequest(width, height + 1, minesCount);
         invalidMineCountGameRequest = new NewGameRequest(width, height, maxMinCount + 1);
 
-        forPlayerStart = new char[minHeightInt][minWidthInt];
+        forPlayerStart = new FieldEnum[minHeightInt][minWidthInt];
         for (int i = 0; i < minHeightInt; i++) {
             for (int j = 0; j < minWidthInt; j++) {
-                forPlayerStart[i][j] = ' ';
+                forPlayerStart[i][j] = SPACE;
             }
         }
         gameInfo.setGameId(gameId);
