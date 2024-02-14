@@ -3,6 +3,7 @@ package ru.ustinov.sapertest.to;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -45,9 +46,9 @@ public class GameInfoResponse {
     @JsonIgnore
     private FieldEnum[][] marked;
 
-    //Можно было сделать String[][] и не заморачиваться за CharArraySerislizer
     @NotNull
-    @Schema(description = "Игровое поле")
+    @ArraySchema(arraySchema = @Schema(description = "Строки минного поля (количество равно высоте height)"),
+        schema = @Schema(description = "Столбцы минного поля (количество равно ширине width)"))
     @JsonProperty("field")
     private FieldEnum[][] forPlayer;
 
