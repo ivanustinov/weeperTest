@@ -1,6 +1,10 @@
 package ru.ustinov.sapertest.web;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ustinov.sapertest.exception.SaperException;
+import ru.ustinov.sapertest.to.ErrorResopnse;
 import ru.ustinov.sapertest.to.GameInfoResponse;
 import ru.ustinov.sapertest.service.FieldService;
 import ru.ustinov.sapertest.to.NewGameRequest;
@@ -36,7 +41,11 @@ public class MinesWeeperController {
     @Autowired
     private FieldService fieldService;
 
-    @Operation(summary = "Начало новой игры")
+    @Operation(summary = "Начало новой игры", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "Ошибка запроса или некорректное действие"
+                    , content = @Content(schema = @Schema(implementation = ErrorResopnse.class)))
+    })
     @PostMapping("/new")
     public GameInfoResponse startGame(@Valid @RequestBody NewGameRequest request, HttpSession session) {
         final GameInfoResponse response = new GameInfoResponse(request.getHeight()
@@ -52,7 +61,11 @@ public class MinesWeeperController {
         return response;
     }
 
-    @Operation(summary = "Ход пользователя")
+    @Operation(summary = "Ход пользователя", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", description = "Ошибка запроса или некорректное действие"
+                    , content = @Content(schema = @Schema(implementation = ErrorResopnse.class)))
+    })
     @PostMapping("/turn")
     public GameInfoResponse turn(@Valid @RequestBody GameTurnRequest request, HttpSession session) {
         final String gameId = request.getGameId();
