@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,7 @@ public class SaperExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String TURN_CELL_OPENED = "valid.turn_cell_opened.message";
     public static final String NEW_GAME_MINE_COUNT_CHECK = "valid.mine_count.message";
     public static final String SESSION_EXPIRED = "session_expired.message";
+    public static final String INPUT_DATA_MISTAKE = "input_data_parsing_mistake.message";
 
     @Autowired
     private final MessageSourceAccessor messageSourceAccessor;
@@ -44,6 +46,16 @@ public class SaperExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex
             , HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return handleBindingErrors(ex.getBindingResult());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers
+        , HttpStatusCode status, WebRequest request) {
+        final String mistake = Objects.requireNonNull(ex.getMessage());
+        final String message = messageSourceAccessor.getMessage(INPUT_DATA_MISTAKE);
+        final String join = String.join(" ", message, mistake);
+        final ErrorResopnse errorResopnse = new ErrorResopnse(join);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResopnse);
     }
 
     @ExceptionHandler(SaperException.class)
